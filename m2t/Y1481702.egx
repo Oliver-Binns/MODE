@@ -1,0 +1,26 @@
+pre {
+	//Perform any necessary validation here!
+	"Transformation starting".println();
+}
+
+rule MainPage
+transform report: Report{
+	parameters{
+		var params = new Map;
+		params.put("page", report.mainPage);
+		return params;
+	}
+	template: "Y1481702.egl"
+	target: "Report/index.html"
+}
+
+rule OtherPages
+transform page: Page{
+	guard: not (page.section == null)
+	template: "Y1481702.egl"
+	target: "Report/" + page.section.name + page.uid + ".html"
+}
+
+post{
+	"TADA Transformation Finished".println();
+}

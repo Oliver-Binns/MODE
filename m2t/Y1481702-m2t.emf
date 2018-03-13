@@ -1,0 +1,45 @@
+@namespace(uri="Y1481702-m2t", prefix="Y1481702-m2t")
+package Y1481702;
+
+class Report{
+	attr String name;
+	val Page mainPage;
+	val Section[*]#report sections;
+}
+
+class Section{
+	attr String name;
+	ref Report#sections report;
+	val Page[*]#section pages;
+}
+
+class Page{
+	attr int uid;
+	attr String icon;
+	attr String title;
+	ref Section#pages section;
+	val Table[*] tables;
+}
+
+class Table{
+	attr String name;
+	val Row headings;
+	val Row[*] rows;
+}
+
+class Row{
+	val Cell[*] cells;
+}
+
+class Cell{
+	attr String content;
+	ref Page link;
+}
+class ProgressCell extends Cell{
+	attr boolean warning;
+	attr String warningString;
+}
+class LinkCell extends Cell{
+	attr String section;
+	attr int uid;
+}

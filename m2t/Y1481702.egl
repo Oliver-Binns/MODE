@@ -1,0 +1,108 @@
+[%
+var reportObj;
+if(not (page.section == null)){ reportObj = page.section.report; }
+else { reportObj = report; }
+%]
+<html>
+	<head>
+		<title>[%=reportObj.name + " - " + page.title%]</title>
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+		<style>
+			html,body{padding:0;margin:0;}
+			.header{background-color:black;display:inline-block;width:100%;padding:20px;text-align:center;}
+			.header a{color:white;}
+			.progress{margin-bottom:0;}
+			.progress-bar .glyphicon{line-height:20px}
+			h1{text-align:center;}
+			table{width:100%;}
+			table td{padding:5px;}
+		</style>
+	</head>
+	<body>
+		<div class="header">
+			<div class="container">
+				<div class="btn-group btn-group-xs">
+					<button class="btn btn-xs btn-success" onclick="toggleRows('success');"><span class="glyphicon glyphicon-ok-circle"></span> Toggle Completed</button>
+					<button class="btn btn-xs btn-danger" onclick="toggleRows('danger');"><span class="glyphicon glyphicon-exclamation-sign"></span> Toggle Warnings</button>
+				</div>
+				
+				<a href="index.html">
+					<h1>[%=reportObj.name%]</h1>
+				</a>
+			</div>
+			
+		</div>
+		<div class="container">
+			<h1><i class="fa fa-[%=page.icon%]"></i> [%=page.title%]</h1>
+			[%=out.startPreserve("<!--", "-->", "description", true)%]
+			[%=out.stopPreserve()%]
+			[%for (table in page.tables){%]
+			<h2>[%=table.name%]</h2>
+			[%if (table.rows.isEmpty()){%]
+			<div class="alert alert-warning" role="alert"><span class="glyphicon glyphicon-alert" aria-hidden="true"></span> No results found.</div>
+			[%}else{%]
+			<div class="table-responsive">
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							[%for (column in table.headings.cells){%]
+							<th>
+								[%=column.content%]
+							</th>
+							[%}%]
+						</tr>
+					</thead>
+					<tbody>
+						[%for (row in table.rows){%]
+						<tr>
+							[%for (cell in row.cells){%]
+							<td>
+								<!-- IS IT POSSIBLE TO SIMPLY CAST CELL TO STRING? -->
+								[%if(cell.isTypeOf(LinkCell)){%]
+								<a href="[%=cell.section + cell.content%].html" title="Click to drill down.">
+								[%}else if(cell.isTypeOf(ProgressCell)){%]
+								<div class="progress">
+  								<div class="progress-bar [%if(cell.content == "100"){%]progress-bar-success[%}else if(not cell.warning){%]progress-bar-striped active[%}%]" role="progressbar" 
+  								aria-valuenow="[%=cell.content%]" aria-valuemin="0" aria-valuemax="100" 
+  								style="width: [%=cell.content%]%;">
+  								[%}%]
+								[%=cell.content%][%if(cell.isTypeOf(LinkCell)){%]
+								</a>
+								[%}else if(cell.isTypeOf(ProgressCell)){%]%</div>
+									[%if(cell.warning){%]
+										<div class="progress-bar progress-bar-danger" role="progressbar" style="width: [%=(100 - cell.content.asInteger())%]%;" data-toggle="tooltip" data-placement="left" title="[%=cell.warningString%]">
+											<span class="glyphicon glyphicon-exclamation-sign"></span>
+										</div>
+									[%}%]
+								</div>
+								[%}%]
+							</td>
+							[%}%]
+						</tr>
+						[%}%]
+					</tbody>
+				</table>
+			</div>
+			[%}%]
+			[%=out.startPreserve("<!--", "-->", table.name, true)%]
+			[%=out.stopPreserve()%]
+			[%}%]
+		</div>
+	</body>
+	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha256-k2WSCIexGzOj3Euiig+TlR8gA0EmPjuc79OEeY5L45g=" crossorigin="anonymous"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+	<script type="text/javascript">
+		$(function () {$('[data-toggle="tooltip"]').tooltip()});
+		
+		function toggleRows(css_class) {
+			$('.progress-bar-' + css_class).each(function(){
+				var parent = this.parentNode;
+				while(parent.nodeName != "TR"){
+					parent = parent.parentNode;
+				}
+				$(parent).toggle();
+			});
+		}
+	</script>
+</html>

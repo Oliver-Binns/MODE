@@ -1,0 +1,120 @@
+pre{
+	var topLevel;
+	var hasConflict = Sequence{};
+}
+
+rule Gathering
+	transform input: Input!Gathering
+	to output: Output!Gathering{
+		//must contain at least one requirement that needs completing
+		guard: input.getTopLevelRequirements().select(req | req.getProgress() > 0).size() > 0
+		
+		topLevel = output;
+		output.reqs = input.reqs.equivalent();
+		output.tests = input.tests.equivalent();
+		output.people = input.people.equivalent();
+		
+	}
+
+rule CRequirement
+	transform input: Input!CustomerRequirement
+	to output: Output!CustomerRequirement{
+		guard: input.getProgress() < 100
+		
+		output.uid = input.uid;
+		output.description = input.description;
+		output.decomposition = input.decomposition.equivalent();
+		output.origin = input.origin.equivalent();
+		output.allocatedTo = input.allocatedTo.equivalent();
+		
+		//Conflicts of this requirement may be complete, this will then be unsatiable!
+		if(not input.conflicts.select(req | req.getProgress() >= 100).isEmpty()){
+			hasConflict.add(output);
+		}
+		output.conflicts = input.conflicts.equivalent();
+	}
+	
+rule SRequirement
+	transform input: Input!SystemRequirement
+	to output: Output!SystemRequirement{
+		guard: input.getProgress() < 100
+		
+		output.uid = input.uid;
+		output.description = input.description;
+		output.decomposition = input.decomposition.equivalent();
+		output.origin = input.origin.equivalent();
+		output.allocatedTo = input.allocatedTo.equivalent();
+		
+		output.progress = input.progress;
+		output.verifiedBy = input.verifiedBy.equivalent();
+		
+		//Conflicts may be complete, this will then be unsatiable!
+		if(not input.conflicts.select(req | req.getProgress() >= 100).isEmpty()){
+			hasConflict.add(output);
+		}
+		output.conflicts = input.conflicts.equivalent();
+	}
+
+rule Test
+	transform input: Input!TestCase
+	to output: Output!TestCase{
+		guard: input.verifying.select(req | req.getProgress() < 100).size() > 0
+	
+		output.description = input.description;
+	}
+	
+rule Team
+	transform input: Input!TeamMember
+	to output: Output!TeamMember{
+		guard: input.workingOn.select(req | req.getProgress() < 100).size() > 0
+		
+		output.uid = input.uid;
+		output.forename = input.forename;
+		output.surname = input.surname;
+	}
+
+post{
+	//Resolve any conflicts:
+	for(req in hasConflict){
+		var option = System.user.choose("Requirement (" + req.description + ") conflicts with a completed requirement.", 
+			Sequence{
+				"Ignore and remove conflict.",
+				"Set conflicted requirement as insatiable.",
+				"Remove conflicted requirement and all insatiable requirements."
+			}
+		);
+		
+		if(option == "Set conflicted requirement as insatiable."){
+			req.setAsInsatiable();
+		}else if(option == "Remove conflicted requirement and all insatiable requirements."){
+			req.strictlyRelated(Sequence{}).forAll(req | req.removeFromModel());
+		}
+	}
+}
+
+operation Output!Requirement setAsInsatiable(){
+	self.insatiable = true;
+}
+
+operation Output!Requirement strictlyRelated(sequence: Sequence){
+	if(sequence.contains(self)){ return sequence; }
+	
+	sequence.add(self);
+	//All origin requirements should be remove as they depend on this
+	self.origin.forAll(req | req.strictlyRelated(sequence));
+	
+	//All decomposition (recursively) should be removed if they have no other origin
+	self.decomposition.select(req | req.origin.size() == 1).forAll(req | req.strictlyRelated(sequence));
+	
+	return sequence;
+}
+
+operation Output!Requirement removeFromModel(){
+	topLevel.people.removeAll(self.allocatedTo.select(person | person.workingOn.size() == 1));
+	self.allocatedTo = Sequence{};
+	if(self.isTypeOf(Output!SystemRequirement)){
+		topLevel.tests.removeAll(self.verifiedBy.select(test | test.verifying.size() == 1));
+		self.verifiedBy = Sequence{};
+	}
+	topLevel.reqs.remove(self);
+}

@@ -1,0 +1,348 @@
+context Requirement{
+
+	constraint UniqueId{
+		check: Requirement.allInstances().forAll(r | r.uid=self.uid implies r = self)
+		message: "There are multiple requirements with the identifier " + self.uid + "."
+		fix{
+			title: "Set to next unique integer."
+			do{
+				self.uid = Requirement.all.sortBy(r | r.uid).last().uid + 1;
+			}
+		}
+		fix{
+			title: "Enter a new unique identifier."
+			do{
+				self.uid = System.user.promptInteger("Enter an Integer.");
+			}
+		}
+	}
+
+	constraint DescriptionLength{
+		guard: self.description.isDefined()
+		check: self.description.length >= 10
+		message: "The description of requirement " + self.uid + " must be at least 10 characters long."
+		fix{
+			title: "Enter a new description."
+			do{
+				var target:= System.user.prompt("Enter a new description:");
+				if(target.isDefined()){
+					self.description:= target;
+				}
+			}
+		}
+	}
+	
+	constraint DecompositionFreeOfCycles{
+		guard: not self.decomposition.isEmpty()
+		check: not self.containsCycle(self)
+		message: "Requirements decompositions must not cycle."
+	}
+	
+	constraint Insatiable{
+		guard: self.insatiable
+		check: self.getProgress() < 100
+		message: "Insatiable requirements cannot progress to 100%."
+		fix{
+			title: "Set as no longer insatiable."
+			do{
+				self.insatiable = false;
+			}
+		}
+	}
+}
+
+context CustomerRequirement{
+
+	constraint NotLeafRequirement{
+		check: not self.decomposition.isEmpty()
+		message: "Customer Requirement " + self.description + " must be made up of at least one technical requirement."
+		fix{
+			title: "Create a new Technical requirement."
+			do{
+				var tr = new TechnicalRequirement();
+				self.decomposition.add(tr);
+			}
+		}
+		fix{
+			title: "Add an existing System Requirement."
+			do{
+				var option = System.user.choose("Choose an existing System Requirement.", SystemRequirement.all);
+				self.decomposition.add(option);
+			}
+		}
+	}
+	
+	constraint CannotOriginateFromSystemRequirement{
+		check: self.origin.forAll(o | not o.isTypeOf(SystemRequirement))
+		message: "Customer Requirements cannot originate from a System Requirement."
+		//Propose a fix, it might be easier to move this constraint to CustomerRequirement for this!
+		fix{
+			title: "Remove decomposition link."
+			do{
+				var systemOrigins = self.origin.select(o | not o.isTypeOf(SystemRequirement));
+				self.origin.removeAll(systemOrigins);
+			}
+		}
+	}
+	
+	constraint ConflictMustBeMutual{
+		check: self.conflicts.forAll(req | req.conflicts.contains(self))
+		message: "Conflicts must be mutual to both requirements."
+		fix{
+			title: "Remove non-mutual conflicts from this requirement."
+			do{
+				var missing = self.conflicts.select(req | not req.conflicts.contains(self));
+				self.conflicts.removeAll(missing);
+			}
+		}
+		fix{
+			title: "Add this requirement as conflicting in other requirements."
+			do{
+				var missing = self.conflicts.select(req | not req.conflicts.contains(self));
+				missing.forAll(req | req.conflicts.add(self));
+			}
+		}
+	}
+	
+	constraint ConflictingRequirementsComplete{
+		guard: self.getProgress() >= 100
+		check: self.conflicts.forAll(req | not (req.getProgress() >= 100))
+		message: "Conflicting requirements cannot both be complete."
+		fix{
+			title: "Remove conflicts between completed requirements."
+			do{
+				self.conflicts.removeAll(self.conflicts.forAll(req | not (req.getProgress() >= 100)));
+			}
+		}
+	}
+}
+
+context SystemRequirement{
+
+	constraint HasOrigin{
+		check: not self.origin.isEmpty()
+		message: "System Requirement (" + self.description + ") does not originate from another requirement."
+		
+		fix{
+			title: "Select requirements to add as the origin for " + self.description + "."
+			do{
+				var choice = System.user.chooseMany("Select some requirements.", Requirement.all);
+				while(choice.isEmpty()){
+					choice = System.user.chooseMany("Select some requirements.", Requirement.all);
+				}
+				self.workingOn.addAll(choice);
+			}
+		}
+	}
+
+	constraint NotNullProgressIfLeaf{
+		guard: self.decomposition.isEmpty()
+		check: self.progress.isDefined()
+		message: "This requirement (" + self.description + ") can't be further decomposed, its progress attribute must be set."
+		fix{
+			title: "No progress made."
+			do{
+				self.progress = 0;
+			}
+		}
+		fix{
+			title: "Enter the progress made."
+			do{
+				self.progress = getPercentageFromUser();
+			}
+		}
+		fix{
+			title: "Requirement has been completed."
+			do{
+				self.progress = 100;
+			}
+		}
+	}
+	
+	constraint PercentageValid{
+		guard: self.decomposition.isEmpty() and self.satisfies("NotNullProgressIfLeaf")
+		check: self.progress >= 0 and self.progress <= 100
+		message: "Progress must be expressed in percentages between 0 and 100."
+		
+		fix{
+			title: "Enter a valid percentage:"
+			do{
+				var target:= System.user.prompt("Enter a percentage between 0 and 100:");
+				if(target.isDefined()){
+					self.progress:= target;
+				}
+			}
+		}
+	}
+	
+	constraint ConflictMustBeMutual{
+		check: self.conflicts.forAll(req | req.conflicts.contains(self))
+		message: "Conflicts must be mutual to both requirements."
+		fix{
+			title: "Remove non-mutual conflicts from this requirement."
+			do{
+				var missing = self.conflicts.select(req | not req.conflicts.contains(self));
+				self.conflicts.removeAll(missing);
+			}
+		}
+		fix{
+			title: "Add this requirement as conflicting in other requirements."
+			do{
+				var missing = self.conflicts.select(req | not req.conflicts.contains(self));
+				missing.forAll(req | req.conflicts.add(self));
+			}
+		}
+	}
+	
+	constraint ConflictingRequirementsComplete{
+		guard: self.getProgress() >= 100
+		check: self.conflicts.forAll(req | not (req.getProgress() >= 100))
+		message: "Conflicting requirements cannot both be complete."
+		fix{
+			title: "Set progress to zero."
+			do{
+				self.progress = 0;
+			}
+		}
+		fix{
+			title: "Enter progress made."
+			do{
+				self.progress = getPercentageFromUser();
+			}
+		}
+		fix{
+			title: "Remove conflicts between completed requirements."
+			do{
+				self.conflicts.removeAll(self.conflicts.forAll(req | not (req.getProgress() >= 100)));
+			}
+		}
+	}
+	
+	critique NullProgressIfNotLeaf{
+		guard: not self.decomposition.isEmpty()
+		check: not self.progress.isDefined() or not (self.progress == null)
+		message: "The requirement (" + self.description + ") can be decomposed, its progress attribute will be ignored."
+		fix{
+			title: "Set to null."
+			do{
+				self.progress = null;
+			}
+		}
+	}
+}
+
+context TestCase{
+	constraint UniqueId{
+		check: TestCase.allInstances().forAll(test | test.uid=self.uid implies test = self)
+		message: "There are multiple different Test Cases with the identifier " + self.uid + "."
+		fix{
+			title: "Set next unique identifier."
+			do{
+				self.uid = TestCase.all.sortBy(r | r.uid).last().uid + 1;
+			}
+		}
+		fix{
+			title: "Enter a new unique identifier."
+			do{
+				self.uid = System.user.promptInteger("Enter an Integer.");
+			}
+		}
+	}
+
+	critique DescriptionLength{
+		guard: self.description.isDefined()
+		check: self.description.length >= 10
+		message: "In order to help ensure that the description of Test Case " + self.description + " is meaningful, it should be at least 10 characters long."
+		fix{
+			title: "Enter a new description."
+			do{
+				var target:= System.user.prompt("Enter a new description:");
+				if(target.isDefined()){
+					self.description:= target;
+				}
+			}
+		}
+	}
+}
+
+context TeamMember{
+
+	constraint UniqueId{
+		check: TeamMember.allInstances().forAll(tm | tm.uid=self.uid implies tm = self)
+		message: "There are multiple different Team Members with the identifier " + self.uid + "."
+		fix{
+			title: "Set next unique identifier."
+			do{
+				self.uid = TeamMember.all.sortBy(r | r.uid).last().uid + 1;
+			}
+		}
+		fix{
+			title: "Enter a new unique identifier."
+			do{
+				self.uid = System.user.promptInteger("Enter an Integer.");
+			}
+		}
+	}
+	
+	critique ForenameStartsWithUpper{
+		guard: self.forename.isDefined()
+		check: self.forename == self.forename.firstToUpperCase()
+		message: "The name " + self.forename + " should start with an uppercase letter."
+		fix{
+			title: "Rename to " + self.forename.firstToUpperCase() + "."
+			do{
+				self.forename = self.forename.firstToUpperCase();
+			}
+		}
+	}
+	
+	critique SurnameStartsWithUpper{
+		guard: self.surname.isDefined()
+		check: self.surname == self.surname.firstToUpperCase()
+		message: "The name " + self.surname + " should start with an uppercase letter."
+		fix{
+			title: "Rename to " + self.surname.firstToUpperCase() + "."
+			do{
+				self.surname = self.surname.firstToUpperCase();
+			}
+		}
+	}
+	
+	critique EmployeeFree{
+		check: not self.workingOn.isEmpty()
+		message: "Employee " + self.fullname + " has no allocated work."
+		fix{
+			title: "Choose some requirements for " + self.fullname +" to work on."
+			do{
+				var choice = System.user.chooseMany("Select some requirements.", Requirement.all);
+				if(not choice.isEmpty()){
+					self.workingOn.addAll(choice);
+				}
+			}
+		}
+	}
+}
+
+operation Requirement containsCycle(match: Requirement){
+	//There is a cycle!
+	if(self.decomposition.contains(match)){
+		return true;
+	}
+	
+	//Recurse
+	for (req in self.decomposition){
+		if(req.containsCycle(match)){
+			return true;
+		}
+	}
+	
+	return false;
+}
+
+operation getPercentageFromUser(){
+	var num = -1;
+	while(num < 0 or num > 100){
+		num = System.user.promptInteger("Enter a percentage between 0 and 100:");
+	}
+	return num;
+}

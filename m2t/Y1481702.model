@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="ASCII"?>
+<Y1481702-m2t:Report xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Y1481702-m2t="Y1481702-m2t" name="Requirements Report">
+  <mainPage title="Top Level">
+    <tables name="Top Level Customer Requirements">
+      <headings>
+        <cells content="ID"/>
+        <cells content="Description"/>
+        <cells content="Progress"/>
+      </headings>
+      <rows>
+        <cells xsi:type="Y1481702-m2t:LinkCell" content="0" section="requirements"/>
+        <cells content="Customer requirement 1"/>
+        <cells xsi:type="Y1481702-m2t:ProgressCell" content="15" warning="true" warningString="This requirement can never be completed as part of its decomposition is insatiable."/>
+      </rows>
+      <rows>
+        <cells xsi:type="Y1481702-m2t:LinkCell" content="6" section="requirements" uid="6"/>
+        <cells content="Customer Requirement 2"/>
+        <cells xsi:type="Y1481702-m2t:ProgressCell" content="100"/>
+      </rows>
+    </tables>
+    <tables name="Team Members">
+      <headings>
+        <cells content="ID"/>
+        <cells content="Forename"/>
+        <cells content="Surname"/>
+        <cells content="Tasks"/>
+      </headings>
+      <rows>
+        <cells xsi:type="Y1481702-m2t:LinkCell" content="0" section="people"/>
+        <cells content="Joe"/>
+        <cells content="Bloggs"/>
+        <cells content="2"/>
+      </rows>
+      <rows>
+        <cells xsi:type="Y1481702-m2t:LinkCell" content="1" section="people" uid="1"/>
+        <cells content="John"/>
+        <cells content="Smith"/>
+        <cells content="1"/>
+      </rows>
+    </tables>
+    <tables name="Test Cases">
+      <headings>
+        <cells content="ID"/>
+        <cells content="Description"/>
+      </headings>
+      <rows>
+        <cells xsi:type="Y1481702-m2t:LinkCell" content="0" section="testcase"/>
+        <cells content="Testing 123"/>
+      </rows>
+    </tables>
+  </mainPage>
+  <sections name="requirements">
+    <pages uid="2" icon="list-alt" title="Decomposition 1">
+      <tables name="Decomposes Into">
+        <headings>
+          <cells content="ID"/>
+          <cells content="Description"/>
+          <cells content="Progress"/>
+        </headings>
+      </tables>
+      <tables name="Allocated To">
+        <headings>
+          <cells content="ID"/>
+          <cells content="Forename"/>
+          <cells content="Surname"/>
+          <cells content="Tasks"/>
+        </headings>
+        <rows>
+          <cells xsi:type="Y1481702-m2t:LinkCell" content="0" section="people"/>
+          <cells content="Joe"/>
+          <cells content="Bloggs"/>
+          <cells content="2"/>
+        </rows>
+      </tables>
+      <tables name="Conflicts With">
+        <headings>
+          <cells content="ID"/>
+          <cells content="Description"/>
+          <cells content="Progress"/>
+        </headings>
+      </tables>
+      <tables name="Verified By">
+        <headings>
+          <cells content="ID"/>
+          <cells content="Description"/>
+        </headings>
+        <rows>
+          <cells xsi:type="Y1481702-m2t:LinkCell" content="0" section="testcase"/>
+          <cells content="Testing 123"/>
+        </rows>
+      </tables>
+    </pages>
+    <pages icon="money" title="Customer requirement 1">
+      <tables name="Decomposes Into">
+        <headings>
+          <cells content="ID"/>
+          <cells content="Description"/>
+          <cells content="Progress"/>
+        </headings>
+        <rows>
+          <cells xsi:type="Y1481702-m2t:LinkCell" content="2" section="requirements" uid="2"/>
+          <cells content="Decomposition 1"/>
+          <cells xsi:type="Y1481702-m2t:ProgressCell" content="5"/>
+        </rows>
+        <rows>
+          <cells xsi:type="Y1481702-m2t:LinkCell" content="1" section="requirements" uid="1"/>
+          <cells content="Testing 1Decomp 2"/>
+          <cells xsi:type="Y1481702-m2t:ProgressCell" content="25" warning="true" warningString="This requirement cannot be completed as a conflicting requirement has been completed."/>
+        </rows>
+      </tables>
+      <tables name="Allocated To">
+        <headings>
+          <cells content="ID"/>
+          <cells content="Forename"/>
+          <cells content="Surname"/>
+          <cells content="Tasks"/>
+        </headings>
+        <rows>
+          <cells xsi:type="Y1481702-m2t:LinkCell" content="0" section="people"/>
+          <cells content="Joe"/>
+          <cells content="Bloggs"/>
+          <cells content="2"/>
+        </rows>
+      </tables>
+      <tables name="Conflicts With">
+        <headings>
+          <cells content="ID"/>
+          <cells content="Description"/>
+          <cells content="Progress"/>
+        </headings>
+      </tables>
+    </pages>
+    <pages uid="1" icon="list-alt" title="Testing 1Decomp 2">
+      <tables name="Decomposes Into">
+        <headings>
+          <cells content="ID"/>
+          <cells content="Description"/>
+          <cells content="Progress"/>
+        </headings>
+      </tables>
+      <tables name="Allocated To">
+        <headings>
+          <cells content="ID"/>
+          <cells content="Forename"/>
+          <cells content="Surname"/>
+          <cells content="Tasks"/>
+        </headings>
+        <rows>
+          <cells xsi:type="Y1481702-m2t:LinkCell" content="1" section="people" uid="1"/>
+          <cells content="John"/>
+          <cells content="Smith"/>
+          <cells content="1"/>
+        </rows>
+      </tables>
+      <tables name="Conflicts With">
+        <headings>
+          <cells content="ID"/>
+          <cells content="Description"/>
+          <cells content="Progress"/>
+        </headings>
+        <rows>
+          <cells xsi:type="Y1481702-m2t:LinkCell" content="5" section="requirements" uid="5"/>
+          <cells content="Customer 2 requires"/>
+          <cells xsi:type="Y1481702-m2t:ProgressCell" content="100"/>
+        </rows>
+      </tables>
+      <tables name="Verified By">
+        <headings>
+          <cells content="ID"/>
+          <cells content="Description"/>
+        </headings>
+      </tables>
+    </pages>
+    <pages uid="6" icon="money" title="Customer Requirement 2">
+      <tables name="Decomposes Into">
+        <headings>
+          <cells content="ID"/>
+          <cells content="Description"/>
+          <cells content="Progress"/>
+        </headings>
+        <rows>
+          <cells xsi:type="Y1481702-m2t:LinkCell" content="5" section="requirements" uid="5"/>
+          <cells content="Customer 2 requires"/>
+          <cells xsi:type="Y1481702-m2t:ProgressCell" content="100"/>
+        </rows>
+      </tables>
+      <tables name="Allocated To">
+        <headings>
+          <cells content="ID"/>
+          <cells content="Forename"/>
+          <cells content="Surname"/>
+          <cells content="Tasks"/>
+        </headings>
+      </tables>
+      <tables name="Conflicts With">
+        <headings>
+          <cells content="ID"/>
+          <cells content="Description"/>
+          <cells content="Progress"/>
+        </headings>
+      </tables>
+    </pages>
+    <pages uid="5" icon="list-alt" title="Customer 2 requires">
+      <tables name="Decomposes Into">
+        <headings>
+          <cells content="ID"/>
+          <cells content="Description"/>
+          <cells content="Progress"/>
+        </headings>
+      </tables>
+      <tables name="Allocated To">
+        <headings>
+          <cells content="ID"/>
+          <cells content="Forename"/>
+          <cells content="Surname"/>
+          <cells content="Tasks"/>
+        </headings>
+      </tables>
+      <tables name="Conflicts With">
+        <headings>
+          <cells content="ID"/>
+          <cells content="Description"/>
+          <cells content="Progress"/>
+        </headings>
+        <rows>
+          <cells xsi:type="Y1481702-m2t:LinkCell" content="1" section="requirements" uid="1"/>
+          <cells content="Testing 1Decomp 2"/>
+          <cells xsi:type="Y1481702-m2t:ProgressCell" content="25" warning="true" warningString="This requirement cannot be completed as a conflicting requirement has been completed."/>
+        </rows>
+      </tables>
+      <tables name="Verified By">
+        <headings>
+          <cells content="ID"/>
+          <cells content="Description"/>
+        </headings>
+      </tables>
+    </pages>
+  </sections>
+  <sections name="people">
+    <pages icon="user" title="Joe Bloggs">
+      <tables name="Working On">
+        <headings>
+          <cells content="ID"/>
+          <cells content="Description"/>
+          <cells content="Progress"/>
+        </headings>
+        <rows>
+          <cells xsi:type="Y1481702-m2t:LinkCell" content="0" section="requirements"/>
+          <cells content="Customer requirement 1"/>
+          <cells xsi:type="Y1481702-m2t:ProgressCell" content="15" warning="true" warningString="This requirement can never be completed as part of its decomposition is insatiable."/>
+        </rows>
+        <rows>
+          <cells xsi:type="Y1481702-m2t:LinkCell" content="2" section="requirements" uid="2"/>
+          <cells content="Decomposition 1"/>
+          <cells xsi:type="Y1481702-m2t:ProgressCell" content="5"/>
+        </rows>
+      </tables>
+    </pages>
+    <pages uid="1" icon="user" title="John Smith">
+      <tables name="Working On">
+        <headings>
+          <cells content="ID"/>
+          <cells content="Description"/>
+          <cells content="Progress"/>
+        </headings>
+        <rows>
+          <cells xsi:type="Y1481702-m2t:LinkCell" content="1" section="requirements" uid="1"/>
+          <cells content="Testing 1Decomp 2"/>
+          <cells xsi:type="Y1481702-m2t:ProgressCell" content="25" warning="true" warningString="This requirement cannot be completed as a conflicting requirement has been completed."/>
+        </rows>
+      </tables>
+    </pages>
+  </sections>
+  <sections name="testcase">
+    <pages icon="flask" title="Testing 123">
+      <tables name="Verifying">
+        <headings>
+          <cells content="ID"/>
+          <cells content="Description"/>
+          <cells content="Progress"/>
+        </headings>
+        <rows>
+          <cells xsi:type="Y1481702-m2t:LinkCell" content="2" section="requirements" uid="2"/>
+          <cells content="Decomposition 1"/>
+          <cells xsi:type="Y1481702-m2t:ProgressCell" content="5"/>
+        </rows>
+      </tables>
+    </pages>
+  </sections>
+</Y1481702-m2t:Report>

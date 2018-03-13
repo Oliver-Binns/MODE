@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Y1481702:Gathering xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Y1481702="Y1481702" xmi:id="_KdGg8OZsEeeHzp4lYO8xsQ">
+  <reqs xsi:type="Y1481702:SystemRequirement" xmi:id="_QtF4UOZsEeeHzp4lYO8xsQ" uid="2" description="Decomposition 1" allocatedTo="_Tx8wcOZsEeeHzp4lYO8xsQ" origin="_TN8rgOZsEeeHzp4lYO8xsQ" progress="5" verifiedBy="//@tests.0"/>
+  <reqs xsi:type="Y1481702:CustomerRequirement" xmi:id="_TN8rgOZsEeeHzp4lYO8xsQ" description="Customer requirement 1" allocatedTo="_Tx8wcOZsEeeHzp4lYO8xsQ" decomposition="_QtF4UOZsEeeHzp4lYO8xsQ //@reqs.2"/>
+  <reqs xsi:type="Y1481702:SystemRequirement" uid="1" description="Testing 1Decomp 2" allocatedTo="//@people.1" origin="_TN8rgOZsEeeHzp4lYO8xsQ" conflicts="//@reqs.4" progress="25"/>
+  <reqs xsi:type="Y1481702:CustomerRequirement" uid="6" description="Customer Requirement 2" decomposition="//@reqs.4"/>
+  <reqs xsi:type="Y1481702:SystemRequirement" uid="5" description="Customer 2 requires" origin="//@reqs.3" conflicts="//@reqs.2" progress="100"/>
+  <tests description="Testing 123" verifying="_QtF4UOZsEeeHzp4lYO8xsQ"/>
+  <people xmi:id="_Tx8wcOZsEeeHzp4lYO8xsQ" forename="Joe" surname="Bloggs" workingOn="_TN8rgOZsEeeHzp4lYO8xsQ _QtF4UOZsEeeHzp4lYO8xsQ"/>
+  <people uid="1" forename="John" surname="Smith" workingOn="//@reqs.2"/>
+  <people uid="2" forename="John" surname="Appleseed"/>
+</Y1481702:Gathering>

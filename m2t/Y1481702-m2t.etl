@@ -1,0 +1,195 @@
+pre{
+	var requirement_headings = Sequence{"ID", "Description", "Progress"};
+	var person_headings = Sequence{"ID", "Forename", "Surname", "Tasks"};
+	var testcase_headings = Sequence{"ID", "Description"};
+}
+
+rule ReduceRequirements
+	transform original: Requirements!Gathering
+	to report: Report!Report{
+		report.name = "Requirements Report";
+		
+		//Create the pages for ALL requirements
+		var reqSection = report.createSection("requirements");
+		reqSection.pages.addAll(original.reqs.equivalent());
+		
+		//Create pages for all people
+		var tmSection = report.createSection("people");
+		tmSection.pages.addAll(original.people.equivalent());
+		
+		//Create pages for all testcases
+		var tcSection = report.createSection("testcase");
+		tcSection.pages.addAll(original.tests.equivalent());
+		
+		//Add Main Page:
+		report.mainPage = new Report!Page;
+		report.mainPage.title = "Top Level";
+		
+		//Create a table of all top level requirements on  main page
+		var reqsTable = report.mainPage.createTable("Top Level Customer Requirements");
+		reqsTable.setHeadings(requirement_headings);
+		original.getTopLevelRequirements().forAll(req | reqsTable.rows.add(req.toRow()));
+		
+		//Create a table of all employees on main page
+		var teamTable = report.mainPage.createTable("Team Members");
+		teamTable.setHeadings(person_headings);
+		original.people.forAll(person | teamTable.rows.add(person.toRow()));
+		
+		//Create a table of all test cases on main page
+		var testTable = report.mainPage.createTable("Test Cases");
+		testTable.setHeadings(testcase_headings);
+		original.tests.forAll(test | testTable.rows.add(test.toRow()));
+	}
+
+rule CustReq
+	transform requirement: Requirements!CustomerRequirement
+	to page: Report!Page{
+		page.icon = "money";
+		page.defineRequirement(requirement);
+		
+		var conflicts = page.createTable("Conflicts With");
+		conflicts.setHeadings(requirement_headings);
+		requirement.conflicts.forAll(req | conflicts.rows.add(req.toRow()));
+	}
+
+rule SysRequirements
+	transform requirement: Requirements!SystemRequirement
+	to page: Report!Page{
+		page.icon = "list-alt";
+		page.defineRequirement(requirement);
+		
+		var conflicts = page.createTable("Conflicts With");
+		conflicts.setHeadings(requirement_headings);
+		requirement.conflicts.forAll(req | conflicts.rows.add(req.toRow()));
+		
+		var tests = page.createTable("Verified By");
+		tests.setHeadings(testcase_headings);
+		requirement.verifiedBy.forAll(test | tests.rows.add(test.toRow()));
+	}
+	
+rule TeamMember
+	transform tm: Requirements!TeamMember
+	to page: Report!Page{
+		page.uid = tm.uid;
+		page.title = tm.fullname;
+		page.icon = "user";
+		
+		var work = page.createTable("Working On");
+		work.setHeadings(requirement_headings);
+		tm.workingOn.forAll(req | work.rows.add(req.toRow()));
+	}
+	
+rule TestCase
+	transform tc: Requirements!TestCase
+	to page: Report!Page{
+		page.uid = tc.uid;
+		page.title = tc.description;
+		page.icon = "flask";
+		
+		var table = page.createTable("Verifying");
+		table.setHeadings(requirement_headings);
+		tc.verifying.forAll(req | table.rows.add(req.toRow()));
+	}
+
+operation Report!Page defineRequirement(req: Requirements!Requirement){
+	self.uid = req.uid;
+	self.title = req.description;
+	
+	var decomposition = self.createTable("Decomposes Into");
+	decomposition.setHeadings(requirement_headings);
+	req.decomposition.forAll(req | decomposition.rows.add(req.toRow()));
+	
+	var allocated = self.createTable("Allocated To");
+	allocated.setHeadings(person_headings);
+	req.allocatedTo.forAll(tm | allocated.rows.add(tm.toRow()));
+}
+
+operation Requirements!Requirement toRow(){
+	var row: new Report!Row;
+	
+	row.createLinkCell(self.uid, "requirements");
+	row.createCell(self.description);
+	
+	var progress: new Report!ProgressCell;
+	progress.content = self.progress + "";
+	if(self.insatiable()){
+		progress.warning = true;
+		progress.warningString = "This requirement cannot be completed as a conflicting requirement has been completed.";
+	}
+	else if(self.decompositionInsatiable()){
+		progress.warning = true;
+		progress.warningString = "This requirement can never be completed as part of its decomposition is insatiable.";
+	}
+	row.cells.add(progress);
+	
+	return row;
+}
+operation Requirements!Requirement insatiable(){
+	return self.insatiable or (self.conflicts.select(req | req.getProgress >= 100).size > 0);
+}
+operation Requirements!Requirement decompositionInsatiable(){
+	for(req in self.decomposition){
+		if(req.insatiable()){
+			return true;
+		}else if(req.decompositionInsatiable()){
+			return true;
+		}
+	}
+	return false;
+}
+
+operation Requirements!TeamMember toRow(){
+	var row: new Report!Row;
+	row.createLinkCell(self.uid, "people");
+	row.createCell(self.forename);
+	row.createCell(self.surname);
+	row.createCell(self.workingOn.size());
+	return row;
+}
+operation Requirements!TestCase toRow(){
+	var row: new Report!Row;
+	row.createLinkCell(self.uid, "testcase");
+	row.createCell(self.description);
+	return row;
+}
+
+operation Report!Report createSection(name: String){
+	var section: new Report!Section;
+	section.name = name;
+	self.sections.add(section);
+	return section;
+}
+
+operation Report!Page createTable(name: String){
+	var table: new Report!Table;
+	table.name = name;
+	self.tables.add(table);
+	return table;
+}
+
+operation Report!Table setHeadings(content: Sequence){
+	self.headings = self.constructRow(content);
+}
+operation Report!Table createRow(content: Sequence){
+	self.rows.add(self.constructRow(content));
+}
+operation Report!Table constructRow(content: Sequence){
+	var row: new Report!Row;
+	for (c in content){ row.createCell(c); }
+	return row;
+}
+
+operation Report!Row createCell(content: Any){
+	var cell: new Report!Cell;
+	cell.content = content + "";
+	self.cells.add(cell);
+	return cell;
+}
+operation Report!Row createLinkCell(content: Integer, section: String){
+	var cell: new Report!LinkCell;
+	cell.content = content + "";
+	cell.section = section;
+	cell.uid = content;
+	self.cells.add(cell);
+	return cell;
+}

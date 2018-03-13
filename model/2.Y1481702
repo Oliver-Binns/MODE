@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Y1481702:Gathering xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:Y1481702="Y1481702">
+  <reqs xsi:type="Y1481702:CustomerRequirement" uid="101" description="Requirements must be identifiable." allocatedTo="//@people.0" decomposition="//@reqs.1 //@reqs.25" origin="//@reqs.3"/>
+  <reqs xsi:type="Y1481702:SystemRequirement" uid="1010" description="Requirement must have a unique ID" allocatedTo="//@people.0" origin="//@reqs.0" progress="100"/>
+  <reqs xsi:type="Y1481702:CustomerRequirement" uid="10915" description="Be able to produce a model." allocatedTo="//@people.0" decomposition="//@reqs.3 //@reqs.5 //@reqs.4"/>
+  <reqs xsi:type="Y1481702:CustomerRequirement" uid="1" description="Model represents requirements." allocatedTo="//@people.0" decomposition="//@reqs.0 //@reqs.8 //@reqs.6 //@reqs.21 //@reqs.25 //@reqs.15 //@reqs.29 //@reqs.33 //@reqs.35" origin="//@reqs.2"/>
+  <reqs xsi:type="Y1481702:CustomerRequirement" uid="2" description="Model represents team members." allocatedTo="//@people.0" decomposition="//@reqs.26" origin="//@reqs.2 //@reqs.29"/>
+  <reqs xsi:type="Y1481702:CustomerRequirement" uid="10911" description="Model represents test cases." allocatedTo="//@people.0" decomposition="//@reqs.24 //@reqs.27" origin="//@reqs.2"/>
+  <reqs xsi:type="Y1481702:CustomerRequirement" uid="104" description="There are two types of requirements, Customer and System." allocatedTo="//@people.0" decomposition="//@reqs.7 //@reqs.25" origin="//@reqs.3 //@reqs.11 //@reqs.12 //@reqs.18 //@reqs.19"/>
+  <reqs xsi:type="Y1481702:SystemRequirement" uid="1040" description="Represents different types of requirements." allocatedTo="//@people.0" decomposition="//@reqs.22 //@reqs.23" origin="//@reqs.6"/>
+  <reqs xsi:type="Y1481702:CustomerRequirement" uid="102" description="Requirements must have a meaningful description." allocatedTo="//@people.0" decomposition="//@reqs.9 //@reqs.25" origin="//@reqs.3"/>
+  <reqs xsi:type="Y1481702:SystemRequirement" uid="1020" description="Requirement description must be at least 10 characters long." allocatedTo="//@people.0" origin="//@reqs.8" progress="100"/>
+  <reqs xsi:type="Y1481702:CustomerRequirement" uid="105" description="Requirements can be decomposed." allocatedTo="//@people.0" decomposition="//@reqs.11 //@reqs.12 //@reqs.25 //@reqs.31" origin="//@reqs.21"/>
+  <reqs xsi:type="Y1481702:CustomerRequirement" uid="1050" description="Customer requirements can be decomposed into technical requirements." allocatedTo="//@people.0" decomposition="//@reqs.6 //@reqs.13" origin="//@reqs.10"/>
+  <reqs xsi:type="Y1481702:CustomerRequirement" uid="1051" description="Technical requirements cannot be decomposed into customer requirements." allocatedTo="//@people.0" decomposition="//@reqs.6 //@reqs.14" origin="//@reqs.10"/>
+  <reqs xsi:type="Y1481702:SystemRequirement" uid="10500" description="Implements decomposition of requirements." allocatedTo="//@people.0" origin="//@reqs.11" progress="100"/>
+  <reqs xsi:type="Y1481702:SystemRequirement" uid="10510" description="Constrain decomposition of technical requirements." allocatedTo="//@people.0" origin="//@reqs.12" progress="100"/>
+  <reqs xsi:type="Y1481702:CustomerRequirement" uid="103" description="Requirements can conflict." allocatedTo="//@people.0" decomposition="//@reqs.18 //@reqs.19 //@reqs.25" origin="//@reqs.3"/>
+  <reqs xsi:type="Y1481702:SystemRequirement" uid="10301" description="Implement system requirement conflicts." allocatedTo="//@people.0" origin="//@reqs.18" progress="100"/>
+  <reqs xsi:type="Y1481702:SystemRequirement" uid="10302" description="Implement customer requirement conflicts." allocatedTo="//@people.0" origin="//@reqs.19" progress="100"/>
+  <reqs xsi:type="Y1481702:CustomerRequirement" uid="1030" description="Customer requirements cannot be in conflict with system requirements." allocatedTo="//@people.0" decomposition="//@reqs.16 //@reqs.6" origin="//@reqs.15"/>
+  <reqs xsi:type="Y1481702:CustomerRequirement" uid="1031" description="System requirements cannot be in conflict with customer requirements." allocatedTo="//@people.0" decomposition="//@reqs.17 //@reqs.6" origin="//@reqs.15"/>
+  <reqs xsi:type="Y1481702:SystemRequirement" uid="1060" description="Each customer requirement needs to be decomposed into at least one technical requirement." allocatedTo="//@people.0" origin="//@reqs.21" progress="100"/>
+  <reqs xsi:type="Y1481702:CustomerRequirement" uid="106" description="Every customer requirement must be implemented." allocatedTo="//@people.0" decomposition="//@reqs.20 //@reqs.10 //@reqs.23" origin="//@reqs.3"/>
+  <reqs xsi:type="Y1481702:SystemRequirement" uid="10401" description="Implement system requirements." allocatedTo="//@people.0" origin="//@reqs.7 //@reqs.27 //@reqs.33" progress="100"/>
+  <reqs xsi:type="Y1481702:SystemRequirement" uid="10402" description="Implement customer requirements." allocatedTo="//@people.0" origin="//@reqs.7 //@reqs.21 //@reqs.33" progress="100"/>
+  <reqs xsi:type="Y1481702:SystemRequirement" uid="10912" description="Implement test cases." allocatedTo="//@people.0" origin="//@reqs.5 //@reqs.27" progress="100"/>
+  <reqs xsi:type="Y1481702:SystemRequirement" uid="107" description="Implement requirements." allocatedTo="//@people.0" origin="//@reqs.3 //@reqs.0 //@reqs.8 //@reqs.15 //@reqs.6 //@reqs.10 //@reqs.29" progress="100"/>
+  <reqs xsi:type="Y1481702:SystemRequirement" uid="20" description="Implement team members." allocatedTo="//@people.0" origin="//@reqs.4" progress="100"/>
+  <reqs xsi:type="Y1481702:CustomerRequirement" uid="31" description="Each test-case needs to be verifying at least one technical requirement." allocatedTo="//@people.0" decomposition="//@reqs.24 //@reqs.22 //@reqs.28" origin="//@reqs.5"/>
+  <reqs xsi:type="Y1481702:SystemRequirement" uid="10914" description="Ensure test cases are useful." allocatedTo="//@people.0" origin="//@reqs.27" progress="100"/>
+  <reqs xsi:type="Y1481702:CustomerRequirement" uid="108" description="Each requirement may be allocated to one or more team members." allocatedTo="//@people.0" decomposition="//@reqs.30 //@reqs.4 //@reqs.25" origin="//@reqs.3"/>
+  <reqs xsi:type="Y1481702:SystemRequirement" uid="1080" description="Implement requirement allocation." allocatedTo="//@people.0" origin="//@reqs.29" progress="100"/>
+  <reqs xsi:type="Y1481702:CustomerRequirement" uid="1052" description="Decomposition must be free of cycles." allocatedTo="//@people.0" decomposition="//@reqs.32" origin="//@reqs.10"/>
+  <reqs xsi:type="Y1481702:SystemRequirement" uid="1053" description="Implement validation checks that require no cycles in requirements decomposition." allocatedTo="//@people.0" origin="//@reqs.31" progress="100"/>
+  <reqs xsi:type="Y1481702:CustomerRequirement" uid="97" description="Each technical requirement must originate from at least one customer requirement." allocatedTo="//@people.0" decomposition="//@reqs.23 //@reqs.22 //@reqs.34" origin="//@reqs.3"/>
+  <reqs xsi:type="Y1481702:SystemRequirement" uid="970" description="Enforce origin requirement." allocatedTo="//@people.0" origin="//@reqs.33" progress="100"/>
+  <reqs xsi:type="Y1481702:CustomerRequirement" uid="109" description="Requirements recursively average a progress percentage." allocatedTo="//@people.0" decomposition="//@reqs.37 //@reqs.36" origin="//@reqs.3"/>
+  <reqs xsi:type="Y1481702:CustomerRequirement" uid="1090" description="Leaf requirement has a progress field." allocatedTo="//@people.0" decomposition="//@reqs.39 //@reqs.40" origin="//@reqs.35"/>
+  <reqs xsi:type="Y1481702:CustomerRequirement" uid="1091" description="Non-leaf requirements recursively average progress of their decomposition." allocatedTo="//@people.0" decomposition="//@reqs.38" origin="//@reqs.35"/>
+  <reqs xsi:type="Y1481702:SystemRequirement" uid="10910" description="Implement progress calculation." allocatedTo="//@people.0" origin="//@reqs.37" progress="100"/>
+  <reqs xsi:type="Y1481702:SystemRequirement" uid="10900" description="Implement a progress attribute." allocatedTo="//@people.0" origin="//@reqs.36" progress="100"/>
+  <reqs xsi:type="Y1481702:SystemRequirement" uid="10901" description="Percentage must be between 0 and 100." allocatedTo="//@people.0" origin="//@reqs.36" progress="100"/>
+  <reqs xsi:type="Y1481702:CustomerRequirement" uid="3" description="Provide model management operations." allocatedTo="//@people.0" decomposition="//@reqs.42 //@reqs.43"/>
+  <reqs xsi:type="Y1481702:CustomerRequirement" uid="10916" description="Model-to-text transformation allows creation of a HTML webpage." allocatedTo="//@people.0" decomposition="//@reqs.44 //@reqs.45 //@reqs.46 //@reqs.47 //@reqs.48" origin="//@reqs.41"/>
+  <reqs xsi:type="Y1481702:CustomerRequirement" uid="10913" description="Model-to-model transformation automatically filters the model." allocatedTo="//@people.0" decomposition="//@reqs.49" origin="//@reqs.41"/>
+  <reqs xsi:type="Y1481702:CustomerRequirement" uid="300" description="Ability to drill down the decomposition tree." allocatedTo="//@people.0" decomposition="//@reqs.51 //@reqs.50" origin="//@reqs.42"/>
+  <reqs xsi:type="Y1481702:CustomerRequirement" uid="301" description="Intuitively visualise progress." allocatedTo="//@people.0" decomposition="//@reqs.50 //@reqs.55 //@reqs.54" origin="//@reqs.42"/>
+  <reqs xsi:type="Y1481702:CustomerRequirement" uid="302" description="View requirements assigned to particular team members." allocatedTo="//@people.0" decomposition="//@reqs.52" origin="//@reqs.42"/>
+  <reqs xsi:type="Y1481702:CustomerRequirement" uid="304" description="View requirements verified by a specific test-case." allocatedTo="//@people.0" decomposition="//@reqs.53" origin="//@reqs.42"/>
+  <reqs xsi:type="Y1481702:CustomerRequirement" uid="305" description="Filter out completed requirements." allocatedTo="//@people.0" decomposition="//@reqs.55 //@reqs.56 //@reqs.57" origin="//@reqs.42"/>
+  <reqs xsi:type="Y1481702:CustomerRequirement" uid="310" description="Excludes completed requirements" allocatedTo="//@people.0" decomposition="//@reqs.58 //@reqs.59 //@reqs.60 //@reqs.61" origin="//@reqs.43"/>
+  <reqs xsi:type="Y1481702:SystemRequirement" uid="3001" description="Implement webpage for each requirement." allocatedTo="//@people.0" origin="//@reqs.45 //@reqs.44" progress="100"/>
+  <reqs xsi:type="Y1481702:SystemRequirement" uid="3000" description="Implement a homepage." allocatedTo="//@people.0" origin="//@reqs.44" progress="100"/>
+  <reqs xsi:type="Y1481702:SystemRequirement" uid="3020" description="Implement webpage for each Team Member." allocatedTo="//@people.0" origin="//@reqs.46" progress="100"/>
+  <reqs xsi:type="Y1481702:SystemRequirement" uid="3030" description="Implement webpage for each TestCase." allocatedTo="//@people.0" origin="//@reqs.47" progress="100"/>
+  <reqs xsi:type="Y1481702:SystemRequirement" uid="3011" description="Implement progress bars." allocatedTo="//@people.0" origin="//@reqs.45" progress="100"/>
+  <reqs xsi:type="Y1481702:SystemRequirement" uid="3010" description="Display requirements progress on webpage." allocatedTo="//@people.0" origin="//@reqs.45 //@reqs.48" progress="100"/>
+  <reqs xsi:type="Y1481702:SystemRequirement" uid="3040" description="Add UI for filtering out completed requirements." allocatedTo="//@people.0" origin="//@reqs.48" progress="100"/>
+  <reqs xsi:type="Y1481702:SystemRequirement" uid="3041" description="Implement dynamic function for filtering out completed requirements on the webpage." allocatedTo="//@people.0" origin="//@reqs.48" progress="100"/>
+  <reqs xsi:type="Y1481702:SystemRequirement" uid="10917" description="Migrate incomplete requirements to new model." allocatedTo="//@people.0" origin="//@reqs.49" progress="100"/>
+  <reqs xsi:type="Y1481702:SystemRequirement" uid="10918" description="Migrate team members with remaining work to new model." allocatedTo="//@people.0" origin="//@reqs.49" progress="100"/>
+  <reqs xsi:type="Y1481702:SystemRequirement" uid="10919" description="Migrate testcases verifying incomplete requirements." allocatedTo="//@people.0" origin="//@reqs.49" progress="100"/>
+  <reqs xsi:type="Y1481702:SystemRequirement" description="Resolve conflicts with removed requirements." allocatedTo="//@people.0" origin="//@reqs.49" progress="50"/>
+  <people forename="Y" surname="1481702" workingOn="//@reqs.3 //@reqs.0 //@reqs.8 //@reqs.15 //@reqs.18 //@reqs.19 //@reqs.6 //@reqs.10 //@reqs.11 //@reqs.12 //@reqs.31 //@reqs.21 //@reqs.29 //@reqs.35 //@reqs.36 //@reqs.37 //@reqs.5 //@reqs.43 //@reqs.2 //@reqs.42 //@reqs.4 //@reqs.41 //@reqs.44 //@reqs.45 //@reqs.46 //@reqs.47 //@reqs.48 //@reqs.27 //@reqs.49 //@reqs.33 //@reqs.61 //@reqs.1 //@reqs.9 //@reqs.16 //@reqs.17 //@reqs.7 //@reqs.22 //@reqs.23 //@reqs.13 //@reqs.14 //@reqs.32 //@reqs.20 //@reqs.25 //@reqs.30 //@reqs.39 //@reqs.40 //@reqs.38 //@reqs.24 //@reqs.28 //@reqs.58 //@reqs.59 //@reqs.60 //@reqs.26 //@reqs.51 //@reqs.50 //@reqs.55 //@reqs.54 //@reqs.52 //@reqs.53 //@reqs.56 //@reqs.57 //@reqs.34"/>
+</Y1481702:Gathering>

@@ -1,0 +1,25 @@
+<project default="GMF">
+	<target name="GMF">
+		<!-- LOAD MODEL -->
+		<epsilon.emf.loadModel name="Requirements"
+			modelfile="m2m/Output.model"
+			metamodeluri="Y1481702"
+			read="true"
+			store="false"/>
+		<!-- LOAD SAVE FILE -->
+		<epsilon.emf.loadModel name="Report"
+			modelfile="m2t/Y1481702.model"
+			metamodeluri="Y1481702-m2t"
+			read="false"
+			store="true"/>
+		<!-- MODEL2MODEL TRANSFORMATION -->
+		<epsilon.etl src="m2t/Y1481702-m2t.etl">
+			<model ref="Requirements"/>
+			<model ref="Report"/>
+		</epsilon.etl>
+		<!-- MODEL2TEXT TRANFORMATION -->
+		<epsilon.egl src="m2t/Y1481702.egx">
+			<model ref="Report"/>
+		</epsilon.egl>
+	</target>
+</project>

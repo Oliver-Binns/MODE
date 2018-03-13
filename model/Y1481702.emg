@@ -1,0 +1,52 @@
+$instances 150
+operation SystemRequirement create(){
+	self.uid = nextInt();
+	self.description = nextString(nextInt(10, 20));
+	self.progress = nextInt(100);
+}
+
+$instances 50
+operation CustomerRequirement create(){
+	self.uid = nextInt();
+	self.description = nextString(nextInt(10, 20));
+	
+	self.decomposition.addAll(nextSample(SystemRequirement.all, nextInt(1, 12)));
+}
+
+$instances 20
+operation TeamMember create() {
+	self.uid = nextInt();
+	self.forename = nextCapitalisedWord("LETTER", nextInt(5, 10));
+	self.surname = nextCapitalisedWord("LETTER", nextInt(5, 15));
+	
+	self.workingOn.addAll(nextSample(Requirement.all, nextInt(1, 5)));
+}
+
+$instances 500
+operation TestCase create(){
+	self.uid = nextInt();
+	self.description = nextString(nextInt(10, 30));
+	
+	self.verifying.addAll(nextSample(SystemRequirement.all, nextInt(1, 5)));
+}
+
+$instances 1
+@list gathering
+operation Gathering create() {
+	self.tests.addAll(TestCase.all);
+	self.people.addAll(TeamMember.all);
+	self.reqs.addAll(Requirement.all);
+}
+
+post{
+	var noOrigin = SystemRequirement.all.select(req | req.origin.isEmpty());
+	noOrigin.forAll(req | req.origin.addAll(nextSample(Requirement.all, nextInt(1, 4))));
+	
+	nextSample(CustomerRequirement.all, nextInt(1, 5)).forAll(req | req.addConflicts(nextSample(CustomerRequirement.all, nextInt(1, 2))));
+	nextSample(SystemRequirement.all, nextInt(1, 10)).forAll(req | req.addConflicts(nextSample(SystemRequirement.all, nextInt(1, 3))));
+}
+
+operation Requirement addConflicts(conflicts: Sequence){
+		self.conflicts.addAll(conflicts);
+		conflicts.forAll(req | req.conflicts.add(self));
+}

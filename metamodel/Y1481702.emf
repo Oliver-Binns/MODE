@@ -1,0 +1,59 @@
+@gmf
+@namespace(uri="Y1481702", prefix="Y1481702")
+package Y1481702;
+
+@gmf.diagram
+class Gathering {
+  op Requirement[*] getTopLevelRequirements();
+  val Requirement[*] reqs;
+  val TestCase[*] tests;
+  val TeamMember[*] people;
+}
+
+@gmf.node(label="description")
+abstract class Requirement {
+  attr int uid;
+  attr boolean insatiable;
+  
+  op Integer getProgress();
+  attr String description;
+
+  ref TeamMember[*]#workingOn allocatedTo;
+
+  @gmf.link(target.decoration="arrow", style="dot", label="decomposes")
+  ref Requirement[*]#origin decomposition;
+  ref Requirement[*]#decomposition origin;
+}
+
+class CustomerRequirement extends Requirement {
+  @gmf.link(label="conflicts", style="dot")
+  ref CustomerRequirement[*] conflicts;
+}
+
+class SystemRequirement extends Requirement {
+  @gmf.link(label="conflicts", style="dot")
+  ref SystemRequirement[*] conflicts;
+  attr Integer progress;
+  
+  ref TestCase[*]#verifying verifiedBy;
+}
+
+@gmf.node(label="description")
+class TestCase {
+  attr int uid;
+  attr String description;
+
+  @gmf.link(label="verifies", style="solid")
+  ref SystemRequirement[+]#verifiedBy verifying;
+}
+
+@gmf.node(label="fullname")
+class TeamMember {
+  attr int uid;
+  attr String forename;
+  attr String surname;
+  volatile transient derived attr String fullname;
+  
+  @gmf.link(label="allocated to", style="solid")
+  ref Requirement[*]#allocatedTo workingOn;
+}
